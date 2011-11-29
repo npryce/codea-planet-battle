@@ -1,0 +1,4 @@
+#!/bin/bash
+
+unionfs-fuse $(readlink -f $(dirname $0)/../../ipad/PlanetBattle.codify)=RW src
+
