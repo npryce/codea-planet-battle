@@ -2,4 +2,5 @@ A simple multiplayer game for Codea on the iPad (aka Codify).
 
 The code is in the src/ directory.
 
-From the raw view of the files, select all and paste into Codea.
+Paste the Lua files into Codea by selecting the raw view of each
+file and pasting into a file in Codea that has the same name.
