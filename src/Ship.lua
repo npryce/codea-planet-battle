@@ -26,7 +26,7 @@ function Ship:init(args)
     }
 
     self.gun = Repeater {
-        period = 0.25,
+        period = 1/3,
         action = function() self:fire() end,
         active = false
     }

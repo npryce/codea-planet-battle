@@ -1,6 +1,6 @@
 LaserBeam = class()
 
-LaserBeam.speed = 750
+LaserBeam.speed = 550
 LaserBeam.length = 20
 
 function LaserBeam:init(args)
