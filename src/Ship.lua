@@ -4,32 +4,37 @@ Ship.minSpeed = 100
 Ship.maxSpeed = 400
 Ship.maxTurnRate = 180
 Ship.random = Random()
+Ship.radius = 15
 
 function Ship:init(args)
-    self.radius = 12.5
     self.color = args.color
-    self.pos = args.pos
-    self.bearing = args.bearing
-    self.desiredBearing = args.bearing
-    self.turretBearing = args.bearing
+    self.initialPos = args.pos
+    self.initialBearing = args.bearing
     self.spawnExhaust = args.spawnExhaust
     self.spawnProjectile = args.spawnProjectile
-    self.speed = 0
-    self.turnRate = 0
-    self.isAiming = false
-    self.health = 1
-    
     self.exhaust = Repeater {
         period = 0.005,
         action = function() self:emitExhaust() end,
         active = false
     }
-
     self.gun = Repeater {
         period = 1/3,
         action = function() self:fire() end,
         active = false
     }
+    
+    self:reset()
+end
+
+function Ship:reset()
+    self.pos = self.initialPos
+    self.bearing = self.initialBearing
+    self.desiredBearing = self.initialBearing
+    self.turretBearing = self.initialBearing
+    self.speed = 0
+    self.turnRate = 0
+    self.isAiming = false
+    self.health = 1
 end
 
 function Ship:animate(dt)
@@ -45,11 +50,17 @@ function Ship:animate(dt)
     
     local vel = bearingToVector(self.bearing) * self.speed
     local newPos = self.pos + vel*dt
-    self.pos = vec2(wrap(newPos.x, -25, WIDTH+25), 
-                    wrap(newPos.y, -25, HEIGHT+25))
+    local xWrap = WIDTH/2 + self.radius*2
+    local yWrap = HEIGHT/2 + self.radius*2
+    
+    self.pos = newPos
     
     self.exhaust:animate(dt)
     self.gun:animate(dt)
+end
+
+function Ship:isLaunched()
+    return self.speed > 0
 end
 
 function Ship:startEngine()

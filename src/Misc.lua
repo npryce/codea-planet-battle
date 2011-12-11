@@ -36,3 +36,7 @@ end
 function alpha(c, newAlpha)
     return color(c.r, c.g, c.b, newAlpha)
 end
+
+function avg(x, y)
+    return (x+y)/2
+end

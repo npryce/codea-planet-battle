@@ -9,7 +9,7 @@ function Random:uniform()
     
     math.randomseed(self.seed)
     local rnd = math.random()
-    self.seed = math.random(0, math.huge)
+    self.seed = math.random(0, math. huge)
     math.randomseed(savedSeed)
     
     return rnd

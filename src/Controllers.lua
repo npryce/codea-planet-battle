@@ -275,10 +275,10 @@ SplitScreen = class(Controller)
 function SplitScreen:init(split)
     if split.top ~= nil then
         self.split = {split.bottom, split.top}
-        self.orientation = function(v) return v.y end
+        self.orientation = vec2(1,0)
     else
         self.split = {split.left, split.right}
-        self.orientation = function(v) return v.x end
+        self.orientation = vec2(0,1)
     end
     self.touches = {}
 end
@@ -287,8 +287,8 @@ function SplitScreen:touched(t)
     local controller
     
     if t.state == BEGAN then
-        local extent = self.orientation(vec2(WIDTH,HEIGHT))
-        local coord = self.orientation(t)
+        local extent = self.orientation:cross(vec2(WIDTH,HEIGHT))
+        local coord = self.orientation:cross(touchPos(t))
 
         if coord < extent/2 then
             controller = self.split[1]

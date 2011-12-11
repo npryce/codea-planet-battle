@@ -1,6 +1,6 @@
 do    
     local random = Random()
-    local screenCenter = vec2(WIDTH/2,HEIGHT/2)
+    local screenCenter = vec2(0,0)
     
     function drawScenery(planetRadius)
         local rng = random:clone()
@@ -25,8 +25,8 @@ do
         noStroke()
     
         for i = 1,125 do
-            local x = rng:uniform() * (WIDTH - 1)
-            local y = rng:uniform() * (HEIGHT - 1)
+            local x = (rng:uniform() - 0.5) * WIDTH
+            local y = (rng:uniform() - 0.5) * HEIGHT
             local b = math.random()*128 + 127
             
             if vec2(x,y):distSqr(screenCenter) > planetRadius^2 then

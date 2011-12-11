@@ -1,12 +1,14 @@
 LaserBeam = class()
 
-LaserBeam.speed = 550
+LaserBeam.speed = 600
 LaserBeam.length = 20
+LaserBeam.lifespan = 3
 
 function LaserBeam:init(args)
     self.pos = args.pos
     self.dir = args.dir
     self.color = args.color or color(88, 255, 0, 255)
+    self.age = 0
 end
 
 function LaserBeam:draw()
@@ -25,12 +27,9 @@ end
 
 function LaserBeam:animate(dt)
     self.pos = self.pos + self.dir*self.speed*dt
+    self.age = self.age + dt
 end
 
 function LaserBeam:isAlive()
-    local x = self.pos.x
-    local y = self.pos.y
-    
-    return x >= -self.length and x < WIDTH+self.length 
-       and y >= -self.length and y < HEIGHT+self.length
+    return self.age <= self.lifespan
 end

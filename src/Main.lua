@@ -16,6 +16,9 @@ function launcher(layer)
 end
 
 function setup()
+    font = ZXMonospace()
+    fontStyle = SimpleFontStyle {size=2}
+    
     animator = Animator()
     ships = Layer()
     projectiles = Layer()
@@ -24,14 +27,14 @@ function setup()
     
     ship1 = Ship {
         color=player1Color, 
-        pos=vec2(WIDTH/2, HEIGHT/2 + planetRadius), 
+        pos=vec2(0, planetRadius), 
         bearing=0,
         spawnExhaust=launcher(exhaust),
         spawnProjectile=launcher(projectiles)
     }
     ship2 = Ship {
         color=player2Color, 
-        pos=vec2(WIDTH/2, HEIGHT/2 - planetRadius),
+        pos=vec2(0, -planetRadius),
         bearing=180,
         spawnExhaust=launcher(exhaust),
         spawnProjectile=launcher(projectiles)
@@ -41,7 +44,7 @@ function setup()
     launch(ships, ship2)
     
     for i = 1,12 do
-        launch(clouds, Cloud(vec2(WIDTH/2, HEIGHT/2), 
+        launch(clouds, Cloud(vec2(0,0), 
                              planetRadius + 40 + math.random()*20))
     end
     
@@ -51,6 +54,8 @@ function setup()
     }
 
     controller:activate()
+    
+    displayMode(FULLSCREEN)
     
     print("Controls:")
     print("")
@@ -94,6 +99,16 @@ end
 function draw()
     background(0, 0, 0, 255)
     smooth()
+    
+    pushMatrix()
+    
+    local halfW = WIDTH/2 
+    local halfH = HEIGHT/2
+    
+    translate(halfW, halfH)
+    
+    trackShips()
+    
     drawScenery(planetRadius)
     animator:animate(DeltaTime)
     
@@ -103,7 +118,50 @@ function draw()
     projectiles:draw()
     exhaust:draw()
     clouds:draw()
+    popMatrix()
+    
+    if not (ship1:isLaunched() or ship2:isLaunched()) then
+        drawInstructions()
+    end
+    
     controller:draw()
 end
 
+function drawInstructions()
+    pushMatrix()
+    pushStyle()
+        
+    noSmooth()
+    stroke(255, 255, 255, 255)
+    line(0, HEIGHT/2, WIDTH, HEIGHT/2)
+    
+    translate(WIDTH/2, HEIGHT/2)
+    
+    pushMatrix()
+    translate(-WIDTH/2, -24)
+    
+    fill(ship1.color)
+    font:render("Player 1 Controls This Side", fontStyle)
+    popMatrix()
+    
+    rotate(180)
+    translate(-WIDTH/2, -24)
+    fill(ship2.color)
+    font:render("Player 2 Controls This Side", fontStyle)
+    
+    popStyle()
+    popMatrix()
+end
 
+function trackShips()
+    local p1 = ship1.pos
+    local p2 = ship2.pos
+    local d = Ship.radius*4
+        
+    local sepX = math.abs(p1.x - p2.x) + d
+    local sepY = math.abs(p1.y - p2.y) + d
+    local mid = avg(p1, p2)
+        
+    scale(math.min(1, WIDTH/sepX, HEIGHT/sepY))
+    translate(-mid.x, -mid.y)
+end 

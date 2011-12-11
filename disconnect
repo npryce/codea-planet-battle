@@ -1,4 +1,0 @@
-#!/bin/bash
-
-sudo umount $(dirname $0)/src/
-
