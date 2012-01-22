@@ -19,11 +19,11 @@ function setup()
     font = ZXMonospace()
     fontStyle = SimpleFontStyle {size=2}
     
-    animator = Animator()
-    ships = Layer()
-    projectiles = Layer()
-    exhaust = Layer()
-    clouds = Layer()
+    animator = Group()
+    ships = Group()
+    projectiles = Group()
+    exhaust = Group()
+    clouds = Group()
     
     ship1 = Ship {
         color=player1Color, 
@@ -104,12 +104,12 @@ function draw()
     
     local halfW = WIDTH/2 
     local halfH = HEIGHT/2
-    
     translate(halfW, halfH)
     
+    drawStars(planetRadius)
     trackShips()
     
-    drawScenery(planetRadius)
+    drawPlanet(planetRadius)
     animator:animate(DeltaTime)
     
     resolveCollisions()

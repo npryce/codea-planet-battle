@@ -4,6 +4,26 @@
 <dict>
 	<key>Author</key>
 	<string>Unknown</string>
+	<key>Buffer Order</key>
+	<array>
+		<string>Main</string>
+		<string>Cloud</string>
+		<string>Controller</string>
+		<string>Controller_Minter</string>
+		<string>Controller_SplitScreen</string>
+		<string>Controller_VirtualStick</string>
+		<string>Ghost</string>
+		<string>LaserBeam</string>
+		<string>Random</string>
+		<string>Ship</string>
+		<string>Spark</string>
+		<string>Scenery</string>
+		<string>Repeater</string>
+		<string>Engine</string>
+		<string>BitmapFont</string>
+		<string>ZXMonospace</string>
+		<string>Misc</string>
+	</array>
 	<key>Created</key>
 	<date>2011-11-23T18:24:56Z</date>
 	<key>Description</key>
