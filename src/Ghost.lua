@@ -2,16 +2,32 @@ Ghost = class()
 Ghost.lifespan = 5
 
 function Ghost:init(args)
-    local ship = args.ship
-    local finishedCallback = finished
-    
-    self.pos = ship.pos
-    self.start = ship.pos
-    self.vec = ship.initialPos - ship.pos
+    self.ship = args.ship
+    self.launcher = args.shipLauncher
+    self.pos = self.ship.pos
+    self.start = self.ship.pos
+    self.vec = self.ship.initialPos - self.ship.pos
     self.age = 0
 end
 
+function Ghost:bounds()
+   return Bounds.fromPoint(self.pos)
+end
+
 function Ghost:animate(dt)
-    self.age = self.age + dt
+    self.age = math.min(self.age + dt, self.lifespan)
     self.pos = self.start + self.vec*(self.age/self.lifespan)
+    
+    if not self:isAlive() then
+        self.ship:reset()
+        self.launcher(self.ship)
+    end
+end
+
+function Ghost:isAlive()
+    return self.age < self.lifespan
+end
+
+function Ghost:draw()
+    -- nothing
 end

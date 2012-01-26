@@ -37,6 +37,10 @@ function Ship:reset()
     self.health = 1
 end
 
+function Ship:bounds()
+   return Bounds.fromCenter(self.pos, self.radius)
+end
+
 function Ship:animate(dt)
     local maxDeltaBearing = self.turnRate*dt
     local desiredDeltaBearing = wrap(self.desiredBearing - self.bearing, -180, 180)

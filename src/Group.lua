@@ -37,3 +37,21 @@ end
 function Group:draw()
     self:each(function (d) d:draw() end)
 end
+
+function Group:fold(query, initial, combine)
+   local result = initial
+   
+   self:each(function (element)
+		result = combine(result, query(element))
+	     end)
+   
+   return result
+end
+
+function Group:bounds()
+   local function boundsOf(thing)
+      return thing.bounds and thing:bounds()
+   end
+   
+   return self:fold(boundsOf, nil, Bounds.merge)
+end

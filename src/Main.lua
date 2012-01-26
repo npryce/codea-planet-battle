@@ -15,6 +15,10 @@ function launcher(layer)
     end
 end
 
+function spawnGhostFor(ship)
+   launch(ships, Ghost {ship=ship, shipLauncher=launcher(ships)})
+end
+
 function setup()
     font = ZXMonospace()
     fontStyle = SimpleFontStyle {size=2}
@@ -55,18 +59,7 @@ function setup()
 
     controller:activate()
     
-    displayMode(FULLSCREEN)
-    
-    print("Controls:")
-    print("")
-    print("First finger  - steer")
-    print("Second finger - fire")
-    print("")
-    print("Player 1 - bottom half of screen")
-    print("Player 2 - top half of screen")
-    print("")
-    print("")
-    print("Scramble!")
+    --displayMode(FULLSCREEN_NO_BUTTONS)
 end
 
 function controllerFor(ship)
@@ -84,9 +77,14 @@ function controllerFor(ship)
 end
 
 function checkCollisionWith(ship)
+    local radiusSq = ship.radius^2
+    
     return function(projectile)
-        if projectile.pos:distSqr(ship.pos) <= ship.radius^2 then
+        if projectile.pos:distSqr(ship.pos) <= radiusSq then
             ship:damaged()
+	    if not ship:isAlive() then
+	       spawnGhostFor(ship)
+	    end
         end
     end
 end
@@ -98,8 +96,11 @@ end
 
 function draw()
     background(0, 0, 0, 255)
-    smooth()
     
+    animator:animate(DeltaTime)
+    resolveCollisions()
+    
+    smooth()
     pushMatrix()
     
     local halfW = WIDTH/2 
@@ -110,9 +111,6 @@ function draw()
     trackShips()
     
     drawPlanet(planetRadius)
-    animator:animate(DeltaTime)
-    
-    resolveCollisions()
     
     ships:draw()
     projectiles:draw()
@@ -154,14 +152,9 @@ function drawInstructions()
 end
 
 function trackShips()
-    local p1 = ship1.pos
-    local p2 = ship2.pos
-    local d = Ship.radius*4
-        
-    local sepX = math.abs(p1.x - p2.x) + d
-    local sepY = math.abs(p1.y - p2.y) + d
-    local mid = avg(p1, p2)
-        
-    scale(math.min(1, WIDTH/sepX, HEIGHT/sepY))
+    local view = ships:bounds():expand(Ship.radius*2)
+    local mid = view:center()
+    
+    scale(math.min(1, WIDTH/view:width(), HEIGHT/view:height()))
     translate(-mid.x, -mid.y)
-end 
+end
