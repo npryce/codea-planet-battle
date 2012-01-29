@@ -16,7 +16,7 @@ end
 
 function Ghost:animate(dt)
     self.age = math.min(self.age + dt, self.lifespan)
-    self.pos = self.start + self.vec*(self.age/self.lifespan)
+    self.pos = self.start + self.vec*((self.age/self.lifespan)^2)
     
     if not self:isAlive() then
         self.ship:reset()

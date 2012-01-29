@@ -6,6 +6,7 @@
 	<string>Unknown</string>
 	<key>Buffer Order</key>
 	<array>
+		<string>Notes</string>
 		<string>Main</string>
 		<string>Cloud</string>
 		<string>Controller</string>
@@ -20,8 +21,6 @@
 		<string>Scenery</string>
 		<string>Repeater</string>
 		<string>Group</string>
-		<string>BitmapFont</string>
-		<string>ZXMonospace</string>
 		<string>Bounds</string>
 		<string>Misc</string>
 	</array>

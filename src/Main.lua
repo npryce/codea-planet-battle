@@ -1,4 +1,4 @@
-
+supportedOrientations(PORTRAIT)
 
 player1Color = color(255,0,0,255)
 player2Color = color(0, 164, 255, 255)
@@ -20,14 +20,12 @@ function spawnGhostFor(ship)
 end
 
 function setup()
-    font = ZXMonospace()
-    fontStyle = SimpleFontStyle {size=2}
-    
     animator = Group()
     ships = Group()
     projectiles = Group()
     exhaust = Group()
     clouds = Group()
+    info = Group()
     
     ship1 = Ship {
         color=player1Color, 
@@ -59,7 +57,7 @@ function setup()
 
     controller:activate()
     
-    --displayMode(FULLSCREEN_NO_BUTTONS)
+    displayMode(FULLSCREEN_NO_BUTTONS)
 end
 
 function controllerFor(ship)
@@ -82,9 +80,9 @@ function checkCollisionWith(ship)
     return function(projectile)
         if projectile.pos:distSqr(ship.pos) <= radiusSq then
             ship:damaged()
-	    if not ship:isAlive() then
+            if not ship:isAlive() then
 	       spawnGhostFor(ship)
-	    end
+            end
         end
     end
 end
@@ -125,27 +123,34 @@ function draw()
     controller:draw()
 end
 
+instructions = [[
+Shoot the other player more times than they shoot you.
+
+On your half of the screen:
+ • First finger to touch controls the ship.
+ • Second finger to touch fires and controls the gun turret.
+]]
+
+
 function drawInstructions()
     pushMatrix()
     pushStyle()
-        
-    noSmooth()
-    stroke(255, 255, 255, 255)
-    line(0, HEIGHT/2, WIDTH, HEIGHT/2)
+    
+    font("Futura-CondensedMedium")
+    fontSize(24)
+    textMode(CORNER)
+    textWrapWidth(WIDTH)
     
     translate(WIDTH/2, HEIGHT/2)
     
-    pushMatrix()
-    translate(-WIDTH/2, -24)
+    local function drawInstructionsFor(ship)
+        fill(ship.color)
+        text(instructions, -WIDTH/2 + 16, -HEIGHT/2 + 16)
+    end
     
-    fill(ship1.color)
-    font:render("Player 1 Controls This Side", fontStyle)
-    popMatrix()
-    
+    drawInstructionsFor(ship1)
     rotate(180)
-    translate(-WIDTH/2, -24)
-    fill(ship2.color)
-    font:render("Player 2 Controls This Side", fontStyle)
+    drawInstructionsFor(ship2)
     
     popStyle()
     popMatrix()

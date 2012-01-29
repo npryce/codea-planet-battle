@@ -23,6 +23,7 @@ function Ship:init(args)
         active = false
     }
     
+    self.deathCount = 0
     self:reset()
 end
 
@@ -34,7 +35,7 @@ function Ship:reset()
     self.speed = 0
     self.turnRate = 0
     self.isAiming = false
-    self.health = 1
+    self.alive = true
 end
 
 function Ship:bounds()
@@ -43,8 +44,10 @@ end
 
 function Ship:animate(dt)
     local maxDeltaBearing = self.turnRate*dt
-    local desiredDeltaBearing = wrap(self.desiredBearing - self.bearing, -180, 180)
-    local deltaBearing = clampMagnitude(desiredDeltaBearing, maxDeltaBearing)
+    local desiredDeltaBearing = wrap(
+        self.desiredBearing - self.bearing, -180, 180)
+    local deltaBearing = clampMagnitude(
+        desiredDeltaBearing, maxDeltaBearing)
     
     self.bearing = self.bearing + deltaBearing
     
@@ -118,14 +121,13 @@ function Ship:emitExhaust()
 end
 
 function Ship:isAlive()
-    return self.health > 0
+    return self.alive
 end
 
 function Ship:damaged()
-    self.health = self.health - 1
-    if self.health == 0 then
-        self:explode()
-    end
+    self.deathCount = self.deathCount + 1
+    self.alive = false
+    self:explode()
 end
 
 function Ship:explode()

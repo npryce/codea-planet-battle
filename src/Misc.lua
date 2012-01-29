@@ -40,3 +40,13 @@ end
 function avg(x, y)
     return (x+y)/2
 end
+
+function fold(table, initial, combine)
+    local result = initial
+        
+    for i, thing in pairs(table) do
+        result = combine(result, thing)
+    end
+        
+    return result
+end
